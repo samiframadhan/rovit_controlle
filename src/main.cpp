@@ -232,8 +232,20 @@ void motor_run(){
   Left_PWM = SpeedtoPWM(leftSetpoint, 0);
   // Right_PWM = SpeedtoPWM(rightSetpoint, 1, rightPIDOut);
   Right_PWM = SpeedtoPWM(rightSetpoint, 1);
-  setMotorPWM(Left_PWM, 1);
-  setMotorPWM(Right_PWM, 0);
+
+  if(leftSetpoint == 0){
+    setMotorPWM(0, 1);
+  }
+  else{
+    setMotorPWM(Left_PWM, 1); 
+  }
+
+  if(rightSetpoint == 0){
+    setMotorPWM(0, 0);
+  }
+  else{
+    setMotorPWM(Right_PWM, 0);
+  }
 }
 
 float SpeedtoPWM(float speed, int motor){
