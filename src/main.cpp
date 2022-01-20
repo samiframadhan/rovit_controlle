@@ -21,8 +21,8 @@ short cmdVelTimeout = 0;
 bool timeout;
 
 //PID Setting Variables
-const float PID_Left_Param[3] = {0.0, 0.0, 0.0};
-const float PID_Right_Param[3] = {0.0, 0.0, 0.0};
+const float PID_Left_Param[3] = {0.1, 0.0, 0.0};
+const float PID_Right_Param[3] = {0.1, 0.0, 0.0};
 double leftPIDOut, rightPIDOut, leftSpeed, rightSpeed, leftSetpoint, rightSetpoint;
 float debug_array[7];
 float tempLSpeed, tempRSpeed;
@@ -143,6 +143,8 @@ void motor_setup(){
   ledcSetup(1, 2000, 8);
   ledcAttachPin(MOTOR_PINS[4], 0);
   ledcAttachPin(MOTOR_PINS[5], 1);
+  PIDLeftMotor.SetMode(AUTOMATIC);
+  PIDRightMotor.SetMode(AUTOMATIC);
 }
 
 void measureSpeed(){
@@ -154,6 +156,16 @@ void measureSpeed(){
   right_encoder.clearCount();
   left_encoder.resumeCount();
   right_encoder.resumeCount(); 
+
+  /*
+  if(pauseMeasurement){
+    //Dont change left&right speed
+  }
+  else{
+    leftSpeed = calculateSpeed(left_encoder.getCount(), 10)
+    rightSpeed = calculateSpeed(right_encoder.getCount(), 10)
+  }
+   */
 }
 
 void setMotorPWM(short PWM, bool left){
@@ -228,10 +240,10 @@ void motor_run(){
   PIDRightMotor.Compute();
   // pauseMeasurement = false;
   
-  // Left_PWM = SpeedtoPWM(leftSetpoint, 0, leftPIDOut);
-  Left_PWM = SpeedtoPWM(leftSetpoint, 0);
-  // Right_PWM = SpeedtoPWM(rightSetpoint, 1, rightPIDOut);
-  Right_PWM = SpeedtoPWM(rightSetpoint, 1);
+  Left_PWM = SpeedtoPWM(leftSetpoint, 0, leftPIDOut);
+  // Left_PWM = SpeedtoPWM(leftSetpoint, 0);
+  Right_PWM = SpeedtoPWM(rightSetpoint, 1, rightPIDOut);
+  // Right_PWM = SpeedtoPWM(rightSetpoint, 1);
 
   if(leftSetpoint == 0){
     setMotorPWM(0, 1);
