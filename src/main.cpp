@@ -145,6 +145,8 @@ void motor_setup(){
   ledcAttachPin(MOTOR_PINS[5], 1);
   PIDLeftMotor.SetMode(AUTOMATIC);
   PIDRightMotor.SetMode(AUTOMATIC);
+  PIDLeftMotor.SetSampleTime(95);
+  PIDRightMotor.SetSampleTime(95);
 }
 
 void measureSpeed(){
@@ -374,7 +376,7 @@ void imu_update(){
 }
 
 void ros_init(){
-  nh.getHardware()->setBaud(250000);
+  nh.getHardware()->setBaud(576000);
   nh.initNode();
   nh.advertise(imu_pub);
   nh.advertise(debug_pub);
