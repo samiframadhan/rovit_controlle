@@ -353,8 +353,10 @@ void imu_update(){
       if (imu.dmpGetCurrentFIFOPacket(imuFifoBuffer))
       {
         imu.dmpGetQuaternion(&imuQ, imuFifoBuffer);
+        imu.dmpGetGravity(&gravity, &imuQ);
         imu.dmpGetGyro(&gyro, imuFifoBuffer);
         imu.dmpGetAccel(&aa, imuFifoBuffer);
+        imu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
         imu_msg.header.stamp = nh.now();
         imu_msg.orientation.w = imuQ.w;
         imu_msg.orientation.x = imuQ.x;
@@ -363,9 +365,12 @@ void imu_update(){
         imu_msg.angular_velocity.x = gyro.x * gyro_scale;
         imu_msg.angular_velocity.y = gyro.y * gyro_scale;
         imu_msg.angular_velocity.z = gyro.z * gyro_scale;
-        imu_msg.linear_acceleration.x = aa.x * acc_scale;
-        imu_msg.linear_acceleration.y = aa.y * acc_scale;
-        imu_msg.linear_acceleration.z = aa.z * acc_scale;
+        imu_msg.linear_acceleration.x = aaReal.x * acc_scale;
+        imu_msg.linear_acceleration.y = aaReal.y * acc_scale;
+        imu_msg.linear_acceleration.z = aaReal.z * acc_scale;
+        // imu_msg.linear_acceleration.x = aa.x * acc_scale;
+        // imu_msg.linear_acceleration.y = aa.y * acc_scale;
+        // imu_msg.linear_acceleration.z = aa.z * acc_scale;
         imu_msg.linear_acceleration_covariance[0] = acc_stddev;
         imu_msg.linear_acceleration_covariance[4] = acc_stddev;
         imu_msg.linear_acceleration_covariance[8] = acc_stddev;
