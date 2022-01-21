@@ -21,8 +21,10 @@ short cmdVelTimeout = 0;
 bool timeout;
 
 //PID Setting Variables
-const float PID_Left_Param[3] = {0.1, 0.0, 0.0};
-const float PID_Right_Param[3] = {0.1, 0.0, 0.0};
+const float PID_Left_Param[3] = {0.3055939155039545, 9.86003191826279, 0.0};
+// opsi lain gain 0.22459699617741438, 7.246654591938676 adjust here https://pidtuner.com/#/DxuRkeRLrY
+const float PID_Right_Param[3] = {0.5240459349708211, 9.21523683674757, 0.0};
+
 double leftPIDOut, rightPIDOut, leftSpeed, rightSpeed, leftSetpoint, rightSetpoint;
 float debug_array[7];
 float tempLSpeed, tempRSpeed;
@@ -147,6 +149,8 @@ void motor_setup(){
   PIDRightMotor.SetMode(AUTOMATIC);
   PIDLeftMotor.SetSampleTime(95);
   PIDRightMotor.SetSampleTime(95);
+  PIDLeftMotor.SetOutputLimits(-0.7, 0.7);
+  PIDRightMotor.SetOutputLimits(-0.7, 0.7);
 }
 
 void measureSpeed(){
@@ -247,6 +251,9 @@ void motor_run(){
   Right_PWM = SpeedtoPWM(rightSetpoint, 1, rightPIDOut);
   // Right_PWM = SpeedtoPWM(rightSetpoint, 1);
 
+  setMotorPWM(Left_PWM, 1);
+  setMotorPWM(Right_PWM, 0);
+/* 
   if(leftSetpoint == 0){
     setMotorPWM(0, 1);
   }
@@ -259,7 +266,7 @@ void motor_run(){
   }
   else{
     setMotorPWM(Right_PWM, 0);
-  }
+  } */
 }
 
 float SpeedtoPWM(float speed, int motor){
