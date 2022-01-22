@@ -10,4 +10,4 @@ const float speed_to_pwm_ratio = 0.0123677; //Ratio to convert speed (in m/s) to
 
 const float wheel_gear_ratio = 26.26; //Gearbox ratio
 const float max_speed = 0.4;
-const int brakeDuty = 255; //Full brake. Adjustable 0-255
+const int brakeDuty = 125; //Full brake. Adjustable 0-255

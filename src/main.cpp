@@ -119,7 +119,7 @@ void update_debug(){
   debug_array[1] = rightSetpoint;
   debug_array[2] = leftPIDOut;
   debug_array[3] = rightPIDOut;
-  debug_array[4] = 0.1;
+  debug_array[4] = 0.01;
   debug_message.data = debug_array;
   debug_message.leftSpeed = leftSpeed;
   debug_message.rightSpeed = rightSpeed;
@@ -253,7 +253,7 @@ void motor_run(){
 
   setMotorPWM(Left_PWM, 1);
   setMotorPWM(Right_PWM, 0);
-/* 
+
   if(leftSetpoint == 0){
     setMotorPWM(0, 1);
   }
@@ -266,7 +266,7 @@ void motor_run(){
   }
   else{
     setMotorPWM(Right_PWM, 0);
-  } */
+  }
 }
 
 float SpeedtoPWM(float speed, int motor){
@@ -432,4 +432,5 @@ void loop() {
   task1();
   task2();
   task3();
+  
 }
