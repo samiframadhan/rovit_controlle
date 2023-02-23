@@ -8,7 +8,6 @@
 #include <rospy_tutorials/Floats.h>
 #include <std_msgs/Header.h>
 #include <geometry_msgs/Twist.h>
-#include <rovit_navstack/debug.h>
 #include <std_msgs/Empty.h>
 #include "pinconfig.h"
 #include "imuconfig.h"
