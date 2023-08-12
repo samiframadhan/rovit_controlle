@@ -309,6 +309,7 @@ void setIMUOffsets(){
 }
 
 void imu_setup(){
+  nh.spinOnce();
   Wire.begin();
   Wire.setClock(400000);
   imu.initialize();
@@ -319,14 +320,15 @@ void imu_setup(){
     imu.CalibrateAccel(6);
     imu.CalibrateGyro(6);
     imu.setDMPEnabled(true);
-    attachInterrupt(imu_int_pin, dmpDataReady, RISING);
-    imuInterruptStatus = imu.getIntStatus();
+    // attachInterrupt(imu_int_pin, dmpDataReady, RISING);
+    // imuInterruptStatus = imu.getIntStatus();
     dmpReady = true;
-    imuPacketSize = imu.dmpGetFIFOPacketSize();
+    // imuPacketSize = imu.dmpGetFIFOPacketSize();
     imu_msg.header.frame_id = "imu_link";
   }
   else
   {
+    dmpReady = true;
     /* Error!, if
      * devstatus == 1; initial memory failed
      * devstatus == 2; DMP Config updates failed
@@ -395,6 +397,7 @@ void ros_init(){
   // nh.advertise(debug_stamp);
   nh.subscribe(cmdVel);
   nh.subscribe(calib_f);
+  nh.spinOnce();
 }
 
 void task1(){
@@ -421,7 +424,8 @@ void task3(){
 void setup() {
   // put your setup code here, to run once:
   ros_init();
-  imu_setup();
+  // imu_setup();
+  dmpReady = true;
   motor_setup();
   WiFi.mode(WIFI_OFF);
   btStop();
@@ -429,8 +433,8 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  task1();
+  // task1();
   task2();
   task3();
-  
+  nh.spinOnce();
 }
