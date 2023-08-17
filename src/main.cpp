@@ -349,13 +349,16 @@ void imu_update(){
   }
   else
   {
+    Serial1.println("Lewat 352");
     if (imu.dmpGetCurrentFIFOPacket(imuFifoBuffer))
       {
+        Serial1.println("Lewat 355");
         imu.dmpGetQuaternion(&imuQ, imuFifoBuffer);
         imu.dmpGetGravity(&gravity, &imuQ);
         imu.dmpGetGyro(&gyro, imuFifoBuffer);
         imu.dmpGetAccel(&aa, imuFifoBuffer);
         imu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
+        Serial1.println("Lewat 361");
         imu_msg.header.stamp = nh.now();
         imu_msg.orientation.w = imuQ.w;
         imu_msg.orientation.x = imuQ.x;
@@ -379,6 +382,7 @@ void imu_update(){
         imu_msg.orientation_covariance[0] = orientation_stddev;
         imu_msg.orientation_covariance[4] = orientation_stddev;
         imu_msg.orientation_covariance[8] = orientation_stddev;
+        Serial1.println("Lewat 385");
         imu_pub.publish(&imu_msg);
         nh.spinOnce();
       }
@@ -448,7 +452,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  // task1();
+  task1();
   task2();
   task3();
   nh.spinOnce();
