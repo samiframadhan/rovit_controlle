@@ -448,8 +448,8 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  task1();
+  // task1();
   task2();
   task3();
-  
+  nh.spinOnce();
 }
