@@ -309,28 +309,35 @@ void setIMUOffsets(){
 }
 
 void imu_setup(){
+  // Setup IMU
+  Serial2.println("Lewat 313");
   Wire.begin();
-  Wire.setClock(400000);
+  Serial2.println("Lewat 315");
+  Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
+  Serial2.println("Lewat 317");
   imu.initialize();
-  pinMode(imu_int_pin, INPUT);
+  Serial2.println("Lewat 319");
+  while (imu.testConnection()!=1)
+  {
+    nh.logerror("IMU not connected yet!");
+    nh.spinOnce();
+  }
+  Serial2.println("Lewat 325");
   imuDevStatus = imu.dmpInitialize();
+  Serial2.println("Lewat 327");
   setIMUOffsets();
-  if(imuDevStatus == 0){
+  Serial2.println("Lewat 329");
+  if(imuDevStatus != 0){
+    nh.logerror("IMU Can't be initialized");
+    Serial2.println("Lewat 332");
+  }
+  else {
+    Serial2.println("Lewat 335");
     imu.CalibrateAccel(6);
     imu.CalibrateGyro(6);
     imu.setDMPEnabled(true);
-    attachInterrupt(imu_int_pin, dmpDataReady, RISING);
-    imuInterruptStatus = imu.getIntStatus();
-    dmpReady = true;
-    imuPacketSize = imu.dmpGetFIFOPacketSize();
-    imu_msg.header.frame_id = "imu_link";
-  }
-  else
-  {
-    /* Error!, if
-     * devstatus == 1; initial memory failed
-     * devstatus == 2; DMP Config updates failed
-     */
+    Serial2.println("Lewat 339");
+    
   }
   
 }
@@ -342,15 +349,7 @@ void imu_update(){
   }
   else
   {
-    if (!dmpReady)
-    {
-      nh.loginfo("IMU Not Ready yet");
-      nh.spinOnce();
-      return;
-    }
-    else
-    {
-      if (imu.dmpGetCurrentFIFOPacket(imuFifoBuffer))
+    if (imu.dmpGetCurrentFIFOPacket(imuFifoBuffer))
       {
         imu.dmpGetQuaternion(&imuQ, imuFifoBuffer);
         imu.dmpGetGravity(&gravity, &imuQ);
@@ -383,18 +382,28 @@ void imu_update(){
         imu_pub.publish(&imu_msg);
         nh.spinOnce();
       }
-    }
+      else nh.logerror("IMU data not ready");
   }
 }
 
 void ros_init(){
-  nh.getHardware()->setBaud(576000);
+  nh.getHardware()->setBaud(115200);
+  Serial2.println("Lewat 380");
   nh.initNode();
+  // while (!nh.connected())
+  // {
+  //   /* code */
+  // }
+  
+  Serial2.println("Lewat 387");
   nh.advertise(imu_pub);
+  Serial2.println("Lewat 389");
   nh.advertise(debug_pub);
+  Serial2.println("Lewat 391");
   // nh.advertise(debug_stamp);
   nh.subscribe(cmdVel);
-  nh.subscribe(calib_f);
+  Serial2.println("Lewat 394");
+  // nh.subscribe(calib_f);
 }
 
 void task1(){
@@ -420,9 +429,19 @@ void task3(){
 
 void setup() {
   // put your setup code here, to run once:
+  Serial2.begin(115200);
+  Serial2.println("Lewat 417");
   ros_init();
+  while(!nh.connected()){
+    nh.spinOnce()  ;
+  }
+  Serial2.println("Lewat 423");
+  nh.spinOnce();
+  Serial2.println("Lewat 425");
   imu_setup();
+  Serial2.println("Lewat 427");
   motor_setup();
+  Serial2.println("Lewat 429");
   WiFi.mode(WIFI_OFF);
   btStop();
 }
