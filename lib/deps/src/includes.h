@@ -1,5 +1,6 @@
 #include <Arduino.h>
-#include <MPU6050_6Axis_MotionApps_V6_12.h>
+#include <I2Cdev.h>
+#include "MPU6050_6Axis_MotionApps20.h"
 #include <PID_v1.h>
 #include <ESP32Encoder.h>
 #include <WiFi.h>
@@ -8,7 +9,6 @@
 #include <rospy_tutorials/Floats.h>
 #include <std_msgs/Header.h>
 #include <geometry_msgs/Twist.h>
-#include <rovit_navstack/debug.h>
 #include <std_msgs/Empty.h>
 #include "pinconfig.h"
 #include "imuconfig.h"
