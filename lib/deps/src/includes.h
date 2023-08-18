@@ -1,5 +1,6 @@
 #include <Arduino.h>
-#include <MPU6050_6Axis_MotionApps_V6_12.h>
+#include <I2Cdev.h>
+#include "MPU6050_6Axis_MotionApps20.h"
 #include <PID_v1.h>
 #include <ESP32Encoder.h>
 #include <WiFi.h>
