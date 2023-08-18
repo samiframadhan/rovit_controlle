@@ -309,7 +309,7 @@ void setIMUOffsets(){
 }
 
 void imu_setup(){
-  nh.spinOnce();
+  // nh.spinOnce();
   Wire.begin();
   Wire.setClock(400000);
   imu.initialize();
@@ -424,7 +424,7 @@ void task3(){
 void setup() {
   // put your setup code here, to run once:
   ros_init();
-  // imu_setup();
+  imu_setup();
   dmpReady = true;
   motor_setup();
   WiFi.mode(WIFI_OFF);
@@ -433,7 +433,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  // task1();
+  task1();
   task2();
   task3();
   nh.spinOnce();
